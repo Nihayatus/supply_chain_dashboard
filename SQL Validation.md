@@ -2,11 +2,11 @@ Data validation using SQL aims to ensure that the values displayed on the dashbo
 
 ## Total Revenue
 ```sql
-SELECT SUM(Revenue) AS Total_Revenue FROM supply_chain_data;
+SELECT ROUND(SUM(Revenue),2) AS Total_Revenue FROM supply_chain_data;
 ```
 | Total_Revenue |
 | -------------------- |
-| 577604.818740             |
+| 577604.82           |
 
 ## Total Product Sold
 ```sql
@@ -18,7 +18,7 @@ SELECT SUM(Products_sold) AS Total_Product_Sold FROM supply_chain_data;
 
 ## Total Costs
 ```sql
-SELECT SUM(Costs)+SUM(Shipping_costs)+SUM(Mfg_costs) AS Total_Costs FROM supply_chain_data;
+SELECT ROUND(SUM(Costs)+SUM(Shipping_costs)+SUM(Mfg_costs),2) AS Total_Costs FROM supply_chain_data;
 ```
 | Total_Costs |
 | -------------------- |
@@ -26,7 +26,7 @@ SELECT SUM(Costs)+SUM(Shipping_costs)+SUM(Mfg_costs) AS Total_Costs FROM supply_
 
 ## Average Profit Margin (%)
 ```sql
-SELECT AVG(Profit_margin%) AS Avg_Profit_Margin% FROM supply_chain_data;
+SELECT ROUND(AVG(Profit_margin%),2) AS Avg_Profit_Margin% FROM supply_chain_data;
 ```
 | Avg_Profit_Margin% |
 | -------------------- |
@@ -48,124 +48,84 @@ SELECT SUM(Order_quantities) AS Order_Quantities FROM supply_chain_data;
 | -------------------- |
 | 4922            |
 
-## Average Quantity Per Order
-```sql
-SELECT AVG(transaction_qty) AS Avg_Qty_Per_Order FROM coffee_sales;
-```
-| Avg_Qty_Per_Order |
-| -------------------- |
-| 1.4487           |
-
-## Daily Trend for Total Orders
+## Total Revenue % by Customer Demographics
 ```sql
 SELECT
-  day AS Day,
-  SUM(transaction_qty) AS Total_Orders
-FROM coffee_sales GROUP BY day;
+  Customer_demographics,
+  ROUND(SUM(Revenue) *100 / (SELECT SUM(Revenue) FROM supply_chain_data),2) AS Total_Revenue
+FROM supply_chain_data GROUP BY Customer_demographics;
 ```
-| Day | Total_Orders |
-| -------------------- | -------------------- |
-| Sunday	| 29627  |
-| Monday	| 30715 |
-| Tuesday	| 29882 |
-| Wednesday	| 30051 |
-| Thursday	| 30659 |
-| Friday	| 30639 |
-| Saturday	| 29083 |
+| Customer_demographics | Total_Revenue |
+| -------------------- | ---------------|
+| Female | 39.85 | 
+| Male | 60.15 | 
 
-## Hourly Trend for Total Orders
+## Average Defect Rate % by Product Type
 ```sql
 SELECT
-  hour AS Hour,
-  SUM(transaction_qty) AS Total_Orders
-FROM coffee_sales GROUP BY hour;
+  Product_type,
+  ROUND(AVG(Defect_rates) * 100 / (SUM(AVG(Defect_rates)) OVER()) ,2) AS Avg_defect_rates
+FROM supply_chain_data GROUP BY Product_type;
 ```
-| Hour | Total_Orders |
-| -------------------- | -------------------- |
-| 6	| 6726 |
-| 7	| 19044 |
-| 8	| 24675 |
-| 9	| 24715 |
-| 10	| 26089 |
-| 11	| 13835 |
-| 12	| 12553 |
-| 13	| 12272 |
-| 14	| 12748 |
-| 15	| 12753 |
-| 16	| 12689 |
-| 17	| 12554 |
+| Product_type | Avg_defect_rates |
+| -------------------- | ---------------|
+| cosmetics | 28.49| 
+| haircare| 36.86| 
+| skincare| 34.65| 
 
-## Sales by Store Location
+## Total Revenue by Product Type
 ```sql
 SELECT
-  store_location AS Store_Location,
-  SUM(total_bill) AS Total_Revenue
-FROM coffee_sales GROUP BY store_location;
+  Product_type,
+  ROUND(SUM(Revenue),2) AS Total_Revenue
+FROM supply_chain_data GROUP BY Product_type ORDER BY Total_Revenue DESC;
 ```
-| Store_Location | Total_Revenue |
-| -------------------- | -------------------- |
-| Astoria	| 213373.71 |
-| Hell's Kitchen	| 211472.72 |
-| Lower Manhattan	| 209060.05 |
+| Product_type | Total_Revenue |
+| -------------------- | ---------------|
+| cosmetics | 161521.27 | 
+| haircare | 174455.39 | 
+| skincare | 241628.16 | 
 
-## Sales by Product Category
+## Top 5 SKU by Total Revenue
 ```sql
 SELECT
-  product_category AS Product_Category,
-  SUM(total_bill) AS Total_Revenue
-FROM coffee_sales GROUP BY product_category;
-```
-| Product_Category | Total_Revenue |
-| -------------------- | -------------------- |
-| Bakery	| 82315.64 |
-| Chocolate	| 76823.64 |
-| Coffee	| 269952.45 |
-| Syrup	| 8408.8 |
-| Tea	| 196405.95 |
-
-## Total Orders by Size
-```sql
-SELECT
-  size AS Size_Product,
-  SUM(transaction_qty) AS Total_Orders
-FROM coffee_sales GROUP BY size;
-```
-| Size_Product | Total_Orders |
-| -------------------- | -------------------- |
-| Large	| 82951 |
-| Regular	| 91887 |
-| Small	| 35818 |
-
-## Top 5 Best Seller by Total Orders
-```sql
-SELECT
-  product_detail AS Product_Detail,
-  SUM(transaction_qty) AS Total_Orders
-FROM coffee_sales GROUP BY product_detail
-ORDER BY Total_Orders DESC
+  SKU,
+  ROUND(SUM(Revenue),2) AS Total_Revenue
+FROM supply_chain_data GROUP BY SKU ORDER BY Total_Revenue DESC
 LIMIT 5;
 ```
-| Product_Detail | Total_Orders |
-| -------------------- | -------------------- |
-| Ethiopia| 13053 |
-| Brazilian| 13012 |
-| Columbian Medium Roast| 12920 |
-| Our Old Time Diner Blend| 12891 |
-| Jamaican Coffee River| 12431 |
+| SKU | Total_Revenue |
+| -------------------- | ---------------|
+| SKU51| 9866.47| 
+| SKU38| 9692.32| 
+| SKU31| 9655.14| 
+| SKU90| 9592.63| 
+| SKU2| 9577.75| 
 
-## Bottom 5 Best Seller by Total Orders
+## Total Revenue by Shipping Carriers
 ```sql
 SELECT
-  product_detail AS Product_Detail,
-  SUM(transaction_qty) AS Total_Orders
-FROM coffee_sales GROUP BY product_detail
-ORDER BY Total_Orders ASC
-LIMIT 5;
+  Shipping_carriers,
+  ROUND(SUM(Revenue),2) AS Total_Revenue
+FROM supply_chain_data GROUP BY Shipping_carriers;
 ```
-| Product_Detail | Total_Orders |
-| -------------------- | -------------------- |
-| Chili Mayan	| 148 |
-| Oatmeal Scone	| 1820 |
-| Ginger Biscotti	| 1836 |
-| Almond Croissant	| 1911 |
-| Chocolate Chip Biscotti	| 1924 |
+| Shipping_carriers | Total_Revenue |
+| -------------------- | ---------------|
+| Carrier A| 142629.99| 
+| Carrier B| 250094.65| 
+| Carrier C| 184880.18|
+
+## Average Profit Margin % by Supplier Name
+```sql
+SELECT
+  Supplier_name,
+  ROUND(AVG(Profit_margin),2) AS Avg_profit_margin
+FROM supply_chain_data GROUP BY Supplier_name ORDER BY Avg_profit_margin DESC;
+```
+| Supplier_name | Avg_profit_margin |
+| -------------------- | ---------------|
+| Supplier 3| 91.08| 
+| Supplier 2| 87.24| 
+| Supplier 5| 85.27| 
+| Supplier 1| 84.16| 
+| Supplier 4| 84.11| 
