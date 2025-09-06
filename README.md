@@ -13,9 +13,9 @@ Dashboard ini menjadi alat bantu strategis bagi perusahaan untuk meningkatkan **
 
 ---
 
-![Dashboard Preview](overview.png)
-![Dashboard Preview](product.png)
-![Dashboard Preview](supplier.png)
+![Dashboard Preview](Overview.png)
+![Dashboard Preview](Product.png)
+![Dashboard Preview](Supplier.png)
 
 ## 🔗 Live Demo
 [**View Dashboard on Tableau Public**](https://public.tableau.com/views/SupplyChainDashboard_17564063562400/Overview?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
