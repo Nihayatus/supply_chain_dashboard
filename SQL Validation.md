@@ -22,7 +22,7 @@ SELECT ROUND(SUM(Costs)+SUM(Shipping_costs)+SUM(Mfg_costs),2) AS Total_Costs FRO
 ```
 | Total_Costs |
 | -------------------- |
-| 52924.5782154             |
+| 58206.06             |
 
 ## Average Profit Margin (%)
 ```sql
@@ -246,11 +246,11 @@ FROM supply_chain_data GROUP BY Supplier_name ORDER BY Total_costs DESC;
 ```
 | Supplier_name | Total_costs | Total_shipping_costs | Total_mfg_costs
 | --------------- | ---------------| ---------------| ---------------|
-| Supplier 1 | 15520.98 | 148.83 | | 
-| Supplier 2 | 11330.60 | 126.26 | | 
-| Supplier 5 | 9648.41 | 104.22 | | 
-| Supplier 4 | 9392.59 | 103.67 | | 
-| Supplier 3 | 7032.00 | 71.83 | |
+| Supplier 1 | 15520.98 | 148.83 | 1221.86 | 
+| Supplier 2 | 11330.60 | 126.26 | 915.70 | 
+| Supplier 5 | 9648.41 | 104.22 | 805.83 | 
+| Supplier 4 | 9392.59 | 103.67 | 1128.78 | 
+| Supplier 3 | 7032.00 | 71.83 | 654.51 |
 
 ## Stock Level by Supplier Name
 ```sql
