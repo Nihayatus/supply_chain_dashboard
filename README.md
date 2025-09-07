@@ -92,5 +92,3 @@ Dashboard ini menjadi alat bantu strategis bagi perusahaan untuk meningkatkan **
    * Lakukan evaluasi Carrier A yang kontribusinya jauh lebih rendah.
 
 ---
-Apakah kamu mau aku rangkum hasil analisis + insight ini menjadi **narasi pengenalan + insight + rekomendasi bisnis** (biar rapi seperti laporan yang bisa kamu masukkan ke GitHub)?
-
